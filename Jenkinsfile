@@ -24,8 +24,8 @@ pipeline {
             steps {
                 sh '''
                     docker run --rm \
-                        --volumes-from jenkins \
-                        -w $WORKSPACE \
+                        -v $WORKSPACE:/workspace \
+                        -w /workspace \
                         python:3.12-slim \
                         sh -c "pip install flake8 -q && flake8 src/ --max-line-length=100"
                 '''
