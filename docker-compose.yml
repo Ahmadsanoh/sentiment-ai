@@ -5,7 +5,7 @@ services:
     build: .
     container_name: sentiment-staging
     ports:
-      - "8080:8000"   # hôte:conteneur
+      - "8001:8000"   # hôte:conteneur
     environment:
       - ENV=development
     networks:
