@@ -1,3 +1,5 @@
+## TP2
+
 from fastapi import FastAPI
 from src.schemas import PredictionRequest, PredictionResponse
 from src.model import SentimentModel
@@ -10,7 +12,10 @@ model = SentimentModel()
 
 @app.get("/health")
 def health():
-    """Endpoint de healthcheck utilisé par Docker et les load balancers."""
+    """Endpoint de healthcheck utilisé par Docker et les load balancers.
+
+    Retourne un statut simple permettant de vérifier que le service est actif.
+    """
     return {"status": "ok"}
 
 
