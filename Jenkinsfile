@@ -173,7 +173,7 @@ pipeline {
                 expression { env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main' }
             }
             steps {
-                sh 'docker exec sentiment-staging curl -f http://localhost:8000/health'
+                sh 'sleep 10 && docker exec sentiment-staging curl -f http://localhost:8000/health'
             }
         }
     }
