@@ -155,10 +155,15 @@ pipeline {
             steps {
                 dir('infra') {
                     sh 'terraform init -input=false'
-                    sh """
-                        terraform apply -auto-approve \
-                            -var='image_tag=${IMAGE_TAG}'
-                    """
+                    sh '''
+                        NETWORK_ID=$(docker network inspect cicd-network --format '{{.Id}}' 2>/dev/null || true)
+                        if [ -n "$NETWORK_ID" ]; then
+                            terraform import docker_network.cicd $NETWORK_ID 2>/dev/null || true
+                        fi
+                        docker stop sentiment-staging 2>/dev/null || true
+                        docker rm sentiment-staging 2>/dev/null || true
+                    '''
+                    sh "terraform apply -auto-approve -var='image_tag=${IMAGE_TAG}'"
                 }
             }
         }
