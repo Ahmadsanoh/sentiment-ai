@@ -1,4 +1,4 @@
-﻿variable "image_tag" {
+variable "image_tag" {
   description = "Tag de l'image Docker a deployer"
   type        = string
   default     = "latest"

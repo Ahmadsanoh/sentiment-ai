@@ -1,4 +1,4 @@
-﻿output "container_id" {
+output "container_id" {
   description = "ID du conteneur staging"
   value       = docker_container.sentiment_staging.id
 }
