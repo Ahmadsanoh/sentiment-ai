@@ -1,4 +1,4 @@
-# TP2
+# TP2git add src/main.py
 
 from fastapi import FastAPI
 from src.schemas import PredictionRequest, PredictionResponse
