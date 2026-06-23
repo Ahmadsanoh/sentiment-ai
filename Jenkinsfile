@@ -173,7 +173,7 @@ pipeline {
                 expression { env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main' }
             }
             steps {
-                sh 'curl -f http://sentiment-staging:8000/health || exit 1'
+                sh 'sleep 5 && curl -f http://localhost:8001/health || exit 1'
             }
         }
     }
