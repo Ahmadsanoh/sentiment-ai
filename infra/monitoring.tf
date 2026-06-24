@@ -1,4 +1,4 @@
-﻿resource "docker_image" "prometheus" {
+resource "docker_image" "prometheus" {
   name         = "prom/prometheus:latest"
   keep_locally = true
 }
