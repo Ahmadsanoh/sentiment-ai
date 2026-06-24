@@ -149,24 +149,28 @@ pipeline {
         }
 
         stage('IaC Apply') {
-            when {
-                expression { env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main' }
-            }
-            steps {
-                dir('infra') {
-                    sh 'terraform init -input=false'
-                    sh '''
-                        NETWORK_ID=$(docker network inspect cicd-network --format '{{.Id}}' 2>/dev/null || true)
-                        if [ -n "$NETWORK_ID" ]; then
-                            terraform import docker_network.cicd $NETWORK_ID 2>/dev/null || true
-                        fi
-                        docker stop sentiment-staging 2>/dev/null || true
-                        docker rm sentiment-staging 2>/dev/null || true
-                    '''
-                    sh "terraform apply -auto-approve -var='image_tag=${IMAGE_TAG}'"
-                }
-            }
+    when {
+        expression { env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main' }
+    }
+    steps {
+        dir('infra') {
+            sh 'terraform init -input=false'
+            sh '''
+                NETWORK_ID=$(docker network inspect cicd-network --format '{{.Id}}' 2>/dev/null || true)
+                if [ -n "$NETWORK_ID" ]; then
+                    terraform import docker_network.cicd $NETWORK_ID 2>/dev/null || true
+                fi
+                docker stop sentiment-staging 2>/dev/null || true
+                docker rm sentiment-staging 2>/dev/null || true
+                docker stop prometheus 2>/dev/null || true
+                docker rm prometheus 2>/dev/null || true
+                docker stop grafana 2>/dev/null || true
+                docker rm grafana 2>/dev/null || true
+            '''
+            sh "DOCKER_HOST=unix:///var/run/docker.sock terraform apply -auto-approve -var='image_tag=${IMAGE_TAG}'"
         }
+    }
+}
 
         stage('Deploy Staging') {
             when {
